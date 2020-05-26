@@ -1,3 +1,4 @@
+const path = require('path');
 const { smart } = require('webpack-merge');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -8,6 +9,11 @@ const baseConfig = require('./webpack.config.base');
 module.exports = smart(baseConfig, {
     mode: 'production',
     // devtool: 'cheap-module-source-map', // 生产环境不推荐开启sourceMap
+    output: {
+      path: path.resolve(__dirname, 'build'), //必须是绝对路径
+      filename: '[name].[hash:6].js',
+      publicPath: '/' //通常是CDN地址
+    },
     plugins: [
         new CleanWebpackPlugin({
             cleanOnceBeforeBuildPatterns: ['**/*', '!dll', '!dll/**'] //不删除dll目录下的文件

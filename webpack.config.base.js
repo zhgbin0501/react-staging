@@ -9,15 +9,9 @@ const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 
 module.exports = {
   entry: {
-    // 打包多页面
     index: './src/index.js',
-    // other: './src/other.js',
   },
-  output: {
-    path: path.resolve(__dirname, 'dist'), //必须是绝对路径
-    filename: '[name].[hash:6].js',
-    publicPath: '/' //通常是CDN地址
-  },
+  
   resolve: {
     //自动扩展文件后缀, 即require时可以不写后缀, 例如`Hello.jsx`就可以使用`import Hello from 'Hello'`;
     extensions: ['.js', '.jsx', 'json'],
