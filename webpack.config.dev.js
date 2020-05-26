@@ -6,10 +6,6 @@ const baseConfig = require('./webpack.config.base');
 module.exports = smart(baseConfig, {
   mode: 'development',
   devtool: 'cheap-module-eval-source-map',
-  output: {
-    path: path.resolve(__dirname, 'dist'), //必须是绝对路径
-    filename: '[name].[hash:6].js',
-  },
   devServer: {
     port: '3000', //默认是8080
     compress: true, //是否启用 gzip 压缩

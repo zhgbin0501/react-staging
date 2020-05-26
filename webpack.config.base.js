@@ -4,16 +4,19 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HappyPack = require('happypack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 
 module.exports = {
   entry: {
     index: './src/index.js',
   },
-  
+  output: {
+    path: path.resolve(__dirname, 'dist'), //必须是绝对路径
+    filename: '[name].[hash:6].js',
+    publicPath: '/' //通常是CDN地址
+  },
   resolve: {
-    //自动扩展文件后缀, 即require时可以不写后缀, 例如`Hello.jsx`就可以使用`import Hello from 'Hello'`;
     extensions: ['.js', '.jsx', 'json'],
     alias: {
       '@': path.resolve(__dirname, 'src'), // 绝对路径，任何src中的文件都可以通过@/xxx找到所需文件
@@ -70,15 +73,16 @@ module.exports = {
     ]
   },
   plugins: [
+
+    // 增加多线程打包
     new HappyPack({
       id: 'js', //和rule中的id=js对应
-      //将之前 rule 中的 loader 在此配置
       use: ['babel-loader'] //必须是数组
     }),
 
     new HappyPack({
       id: 'css',//和rule中的id=css对应
-      use: ['style-loader', 'css-loader', 'postcss-loader'],
+      use: ['style-loader', 'css-loader', 'less-loader', 'postcss-loader'],
     }),
 
     new CopyWebpackPlugin([
@@ -98,14 +102,9 @@ module.exports = {
 
     new HardSourceWebpackPlugin(), // 为模块提供中间缓存
 
-    // new AddAssetHtmlWebpackPlugin({
-    //   filepath: path.resolve(__dirname, 'dist', 'dll', 'react.dll.js')
-    // }),
-
-    // new webpack.DllReferencePlugin({
-    //   manifest: path.resolve(__dirname, 'dist', 'dll', 'manifest.json')
-    // }),
-    
+    new CleanWebpackPlugin({
+      // cleanOnceBeforeBuildPatterns: ['**/*', '!dll', '!dll/**'] //不删除dll目录下的文件
+    }),
 
     new HtmlWebpackPlugin({ // 多页面入口 -- 生成index.html
       template: './public/index.html',
@@ -115,6 +114,7 @@ module.exports = {
       minify: {
         removeAttributeQuotes: false, //是否删除属性的双引号
         collapseWhitespace: false, //是否折叠空白
+        minifyCSS: true // 压缩内联css
       },
     }),
 
