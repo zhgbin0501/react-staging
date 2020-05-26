@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HappyPack = require('happypack');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const AutoDllPlugin = require('autodll-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -29,7 +30,7 @@ module.exports = {
     rules: [
       {
         test: /\.js[x]?$/,
-        use: ['cache-loader', 'Happypack/loader?id=js'],
+        use: ['cache-loader', 'Happypack/loader?id=js'], // 使用cache-loader避免重复打包
         include: [path.resolve(__dirname, 'src')]
       },
       {
@@ -40,18 +41,18 @@ module.exports = {
           'postcss-loader', //自动添加浏览器前缀
           'less-loader', // 将less预处理器的语法转换成css语法
         ],
-        exclude: /node_modules/,
         include: path.resolve(__dirname, 'src'),
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg)/,
-        use: {
+        use: [{
           loader: 'url-loader',
           options: {
             outputPath: 'images/', // 图片输出的路径
             limit: 10 * 1024 // 小于10k图片转换成base64
           }
-        }
+        }],
+        exclude: /node_modules/,
       },
       {
         test: /\.(eot|ttf|woff|woff2)$/,
@@ -103,6 +104,12 @@ module.exports = {
 
     new HardSourceWebpackPlugin(), // 为模块提供中间缓存
 
+    new webpack.DllReferencePlugin({
+      // 注意: DllReferencePlugin 的 context 必须和 package.json 的同级目录，要不然会链接失败
+      context: path.resolve(__dirname, '../'),
+      manifest: path.resolve(__dirname, '../dll/react.manifest.json'),
+    }),
+
     new HtmlWebpackPlugin({ // 多页面入口 -- 生成index.html
       template: './public/index.html',
       filename: 'index.html',
@@ -113,11 +120,12 @@ module.exports = {
         collapseWhitespace: false, //是否折叠空白
       },
     }),
+
     // new HtmlWebpackPlugin({ // 多页面入口 -- 生成other.html
     //   template: './public/other.html',
     //   filename: 'other.html',
     //   // chunks: ['other', 'vender'], // 只引用other.js
     // }),
-    
+
   ],
 }

@@ -8,12 +8,16 @@
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack.config.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --config=webpack.config.prod.js"
+    "build": "cross-env NODE_ENV=production webpack --config=webpack.config.prod.js",
+    "build:dll": "webpack --config webpack.config.dll.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.8.7",
     "@babel/runtime-corejs3": "^7.8.7",
+    "autodll-webpack-plugin": "^0.4.2",
     "express": "^4.17.1",
+    "jQuery": "^1.7.4",
+    "lodash": "^4.17.15",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.21"
