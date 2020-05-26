@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HappyPack = require('happypack');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const AutoDllPlugin = require('autodll-webpack-plugin');
+const AddAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -104,17 +104,20 @@ module.exports = {
 
     new HardSourceWebpackPlugin(), // 为模块提供中间缓存
 
-    new webpack.DllReferencePlugin({
-      // 注意: DllReferencePlugin 的 context 必须和 package.json 的同级目录，要不然会链接失败
-      context: path.resolve(__dirname, '../'),
-      manifest: path.resolve(__dirname, '../dll/react.manifest.json'),
-    }),
+    // new AddAssetHtmlWebpackPlugin({
+    //   filepath: path.resolve(__dirname, 'dist', 'dll', 'react.dll.js')
+    // }),
+
+    // new webpack.DllReferencePlugin({
+    //   manifest: path.resolve(__dirname, 'dist', 'dll', 'manifest.json')
+    // }),
+    
 
     new HtmlWebpackPlugin({ // 多页面入口 -- 生成index.html
       template: './public/index.html',
       filename: 'index.html',
       // 表示该页面需要引入哪些chunk
-      // chunks: ['index', 'common', 'vender'], // 只引用index.js
+      chunks: ['index', 'common', 'vender'], // 只引用index.js
       minify: {
         removeAttributeQuotes: false, //是否删除属性的双引号
         collapseWhitespace: false, //是否折叠空白

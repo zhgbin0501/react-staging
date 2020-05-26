@@ -1,22 +1,22 @@
-const path = require('path');
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
-    mode: 'production',
     entry: {
-        react: ['react', 'react-dom'],
+        react: ['react', 'react-dom']
     },
-    // 这个是输出 dll 文件
+    mode: 'production',
     output: {
-        path: path.resolve(__dirname, '../dll'),
-        filename: '_dll_[name].js',
-        library: '_dll_[name]',
+        filename: '[name].dll.js',
+        path: path.resolve(__dirname, 'dist', 'dll'),
+        library: '[name]_dll' //暴露给外部使用
+        //libraryTarget 指定如何暴露内容，缺省时就是 var
     },
-    // 这个是输出映射表
     plugins: [
-        new webpack.DllPlugin({ 
-            name: '_dll_[name]', // name === output.library
-            path: path.resolve(__dirname, '../dll/[name].manifest.json'),
+        new webpack.DllPlugin({
+            //name和library一致
+            name: '[name]_dll', 
+            path: path.resolve(__dirname, 'dist', 'dll', 'manifest.json') //manifest.json的生成路径
         })
     ]
-};
+}
