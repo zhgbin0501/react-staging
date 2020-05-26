@@ -1,0 +1,13 @@
+# OS or Editor folders  
+.DS_Store
+
+
+# Folders to ignore  
+.hg  
+.svn  
+.CVS  
+.idea  
+node_modules/  
+jscoverage_lib/  
+bower_components/  
+dist/ 
