@@ -19,7 +19,7 @@
     "autodll-webpack-plugin": "^0.4.2",
     "express": "^4.17.1",
     "jQuery": "^1.7.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.21"
